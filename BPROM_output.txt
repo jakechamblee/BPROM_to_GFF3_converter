@@ -1,0 +1,475 @@
+>AF083977____ [Location=[930:1029](-)]                                          
+ Length of sequence-       100
+ Threshold for promoters -  0.20
+ Number of predicted promoters -      1
+ Promoter Pos:     62 LDF-  4.72
+ -10 box at pos.     47 TGGTAAATT Score    67
+ -35 box at pos.     28 TTTTTG    Score    20
+
+ Oligonucleotides from known TF binding sites:
+
+ For promoter at     62:
+       cpxR:  TAAAAAGA at position       5 Score -   9
+     rpoD15:  TTTTGTAA at position      29 Score -  11
+       lexA:  ATAAATAA at position      81 Score -  14
+>AF083977______086c47b193d34ce483551bcd0549145c [Location=[20022:20121](+)]     
+ Length of sequence-       100
+ Threshold for promoters -  0.20
+ Number of predicted promoters -      1
+ Promoter Pos:     78 LDF-  2.94
+ -10 box at pos.     63 TTTTAACCT Score    51
+ -35 box at pos.     41 TTAAAA    Score    37
+
+ Oligonucleotides from known TF binding sites:
+
+ For promoter at     78:
+     rpoD17:  CGCCTTTT at position      59 Score -   7
+>AF083977______12732025e8c742d4a257f5cc8859f3f3 [Location=[20429:20528](+)]     
+ Length of sequence-       100
+ Threshold for promoters -  0.20
+ Number of predicted promoters -      0
+>AF083977______13cfd1554b544df591b839856bb223d1 [Location=[30816:30915](+)]     
+ Length of sequence-       100
+ Threshold for promoters -  0.20
+ Number of predicted promoters -      1
+ Promoter Pos:     78 LDF-  0.80
+ -10 box at pos.     63 TCGGAGAAT Score    27
+ -35 box at pos.     42 TTCCCG    Score    35
+
+ Oligonucleotides from known TF binding sites:
+
+ No such sites for promoter at     78
+>AF083977______191f003d0fff49c28169676d37a443c5 [Location=[6854:6953](+)]       
+ Length of sequence-       100
+ Threshold for promoters -  0.20
+ Number of predicted promoters -      0
+>AF083977______1c0532b307874ea492f43863cf4f5f63 [Location=[23086:23185](+)]     
+ Length of sequence-       100
+ Threshold for promoters -  0.20
+ Number of predicted promoters -      0
+>AF083977______20152df82c1741068fd517785b7ab1a5 [Location=[5701:5800](+)]       
+ Length of sequence-       100
+ Threshold for promoters -  0.20
+ Number of predicted promoters -      1
+ Promoter Pos:     77 LDF-  0.99
+ -10 box at pos.     62 TTGTATACA Score    39
+ -35 box at pos.     37 TTAAGC    Score    -2
+
+ Oligonucleotides from known TF binding sites:
+
+ For promoter at     77:
+       arcA:  TTAATTAA at position      78 Score -  13
+       nagC:  TTTAATTT at position      93 Score -   7
+>AF083977______27b52fe74e184843bb6286bed4ee5171 [Location=[18490:18589](+)]     
+ Length of sequence-       100
+ Threshold for promoters -  0.20
+ Number of predicted promoters -      0
+>AF083977______3e7aa34140ef4472ba3772b3a1371e2d [Location=[11618:11717](+)]     
+ Length of sequence-       100
+ Threshold for promoters -  0.20
+ Number of predicted promoters -      0
+>AF083977______41020ae1f3e14cc994af0ab7a70bda31 [Location=[11126:11225](+)]     
+ Length of sequence-       100
+ Threshold for promoters -  0.20
+ Number of predicted promoters -      0
+>AF083977______410688c8051044c8bbfce13514b96557 [Location=[31358:31457](+)]     
+ Length of sequence-       100
+ Threshold for promoters -  0.20
+ Number of predicted promoters -      1
+ Promoter Pos:     81 LDF-  0.41
+ -10 box at pos.     68 TTATAAATT Score    48
+ -35 box at pos.     48 TATAAA    Score     4
+
+ Oligonucleotides from known TF binding sites:
+
+ For promoter at     81:
+        fnr:  ATTTGTTT at position      74 Score -   7
+>AF083977______424e706c8eb64d2a95ad751f75735e30 [Location=[8681:8780](+)]       
+ Length of sequence-       100
+ Threshold for promoters -  0.20
+ Number of predicted promoters -      0
+>AF083977______4461af6a82eb466fabb00f11e71b78a3 [Location=[9359:9458](+)]       
+ Length of sequence-       100
+ Threshold for promoters -  0.20
+ Number of predicted promoters -      1
+ Promoter Pos:     75 LDF-  0.38
+ -10 box at pos.     60 GGAAATTCT Score    19
+ -35 box at pos.     40 TGGCAG    Score    12
+
+ Oligonucleotides from known TF binding sites:
+
+ No such sites for promoter at     75
+>AF083977______455ec4655c3d46e68dcd281cda251390 [Location=[17956:18055](+)]     
+ Length of sequence-       100
+ Threshold for promoters -  0.20
+ Number of predicted promoters -      0
+>AF083977______4a47bbb0b55d4e20b8dafe429abc2d00 [Location=[17289:17388](+)]     
+ Length of sequence-       100
+ Threshold for promoters -  0.20
+ Number of predicted promoters -      1
+ Promoter Pos:     74 LDF-  1.97
+ -10 box at pos.     59 CGGGATGAT Score    38
+ -35 box at pos.     40 TTGAAG    Score    54
+
+ Oligonucleotides from known TF binding sites:
+
+ No such sites for promoter at     74
+>AF083977______4a9685833ccb4ce0948faf224cd3a9b7 [Location=[9148:9247](+)]       
+ Length of sequence-       100
+ Threshold for promoters -  0.20
+ Number of predicted promoters -      1
+ Promoter Pos:     76 LDF-  2.84
+ -10 box at pos.     61 CAATATCCT Score    36
+ -35 box at pos.     37 TTAATC    Score    13
+
+ Oligonucleotides from known TF binding sites:
+
+ For promoter at     76:
+       cytR:  TTCTGTAA at position      16 Score -   8
+       metJ:  TGTAAACA at position      19 Score -   8
+       lexA:  TTTTTTTA at position      47 Score -  16
+>AF083977______509720f7c8f14681a21846f9e177ddd7 [Location=[10879:10978](+)]     
+ Length of sequence-       100
+ Threshold for promoters -  0.20
+ Number of predicted promoters -      0
+>AF083977______57f7b184f642409f8d4248c5d0cbfbda [Location=[32875:32974](+)]     
+ Length of sequence-       100
+ Threshold for promoters -  0.20
+ Number of predicted promoters -      1
+ Promoter Pos:     69 LDF-  0.26
+ -10 box at pos.     54 CAGAAGAAT Score    23
+ -35 box at pos.     37 TTTATA    Score    39
+
+ Oligonucleotides from known TF binding sites:
+
+ No such sites for promoter at     69
+>AF083977______5e35116107434f2e86a2bc9658197d11 [Location=[5394:5493](+)]       
+ Length of sequence-       100
+ Threshold for promoters -  0.20
+ Number of predicted promoters -      1
+ Promoter Pos:     62 LDF-  0.94
+ -10 box at pos.     47 CGGCATATT Score    44
+ -35 box at pos.     23 CTGAAA    Score    25
+
+ Oligonucleotides from known TF binding sites:
+
+ No such sites for promoter at     62
+>AF083977______5ebc788368064343999acfca0daaa889 [Location=[35668:35767](+)]     
+ Length of sequence-       100
+ Threshold for promoters -  0.20
+ Number of predicted promoters -      1
+ Promoter Pos:     79 LDF-  1.86
+ -10 box at pos.     64 TTTTAAGAT Score    63
+ -35 box at pos.     40 TAACCA    Score     1
+
+ Oligonucleotides from known TF binding sites:
+
+ For promoter at     79:
+       purR:  TTTTTAAG at position      63 Score -   9
+>AF083977______5f89a523cde54ba0870b3883090a6396 [Location=[3258:3357](+)]       
+ Length of sequence-       100
+ Threshold for promoters -  0.20
+ Number of predicted promoters -      1
+ Promoter Pos:     70 LDF-  2.15
+ -10 box at pos.     55 CCATTTAAT Score    26
+ -35 box at pos.     31 TGGAAC    Score     1
+
+ Oligonucleotides from known TF binding sites:
+
+ For promoter at     70:
+       phoB:  TTTAATTA at position      58 Score -  11
+       arcA:  TTAATTAA at position      59 Score -  13
+       phoB:  TTTAATTA at position      80 Score -  11
+>AF083977______63693deced404ee0ab3556b8dc4cfb82 [Location=[19038:19137](+)]     
+ Length of sequence-       100
+ Threshold for promoters -  0.20
+ Number of predicted promoters -      0
+>AF083977______695e06d252114c4eab8b6a49063c01c4 [Location=[34992:35091](+)]     
+ Length of sequence-       100
+ Threshold for promoters -  0.20
+ Number of predicted promoters -      1
+ Promoter Pos:     81 LDF-  2.03
+ -10 box at pos.     66 TGGCATGAT Score    52
+ -35 box at pos.     47 TGGTCG    Score    10
+
+ Oligonucleotides from known TF binding sites:
+
+ For promoter at     81:
+       dnaA:  TTTGGATA at position      38 Score -   6
+>AF083977______6b7d3d74d1d3460f9d8a771dcb805a58 [Location=[26108:26207](+)]     
+ Length of sequence-       100
+ Threshold for promoters -  0.20
+ Number of predicted promoters -      0
+>AF083977______6c6582b39a5f41faa35dfdbf411ae509 [Location=[15973:16072](+)]     
+ Length of sequence-       100
+ Threshold for promoters -  0.20
+ Number of predicted promoters -      1
+ Promoter Pos:     81 LDF-  0.83
+ -10 box at pos.     66 TGCCATTTT Score    28
+ -35 box at pos.     47 TTATCG    Score    24
+
+ Oligonucleotides from known TF binding sites:
+
+ No such sites for promoter at     81
+>AF083977______6f59052af2784dff9e560de93278cee7 [Location=[10377:10476](+)]     
+ Length of sequence-       100
+ Threshold for promoters -  0.20
+ Number of predicted promoters -      1
+ Promoter Pos:     80 LDF-  2.93
+ -10 box at pos.     65 TTTTAGACT Score    59
+ -35 box at pos.     43 ATCCCG    Score     5
+
+ Oligonucleotides from known TF binding sites:
+
+ For promoter at     80:
+       rhaS:  TCCTGTCA at position      30 Score -   7
+       metR:  TTTTTTCA at position      86 Score -   8
+>AF083977______7592cf7a55a54055939e5d587b2669b3 [Location=[35807:35906](+)]     
+ Length of sequence-       100
+ Threshold for promoters -  0.20
+ Number of predicted promoters -      1
+ Promoter Pos:     72 LDF-  0.60
+ -10 box at pos.     57 CATCATAAT Score    49
+ -35 box at pos.     37 TGTCCG    Score    -1
+
+ Oligonucleotides from known TF binding sites:
+
+ No such sites for promoter at     72
+>AF083977______7d28e218e7804d5fba7b0f68b557e349 [Location=[1228:1327](+)]       
+ Length of sequence-       100
+ Threshold for promoters -  0.20
+ Number of predicted promoters -      1
+ Promoter Pos:     77 LDF-  0.87
+ -10 box at pos.     62 AAGTAATCT Score    44
+ -35 box at pos.     38 CTAACG    Score     2
+
+ Oligonucleotides from known TF binding sites:
+
+ For promoter at     77:
+     rpoD17:  AACTAAAC at position      51 Score -   7
+>AF083977______80f56cfd112d4347a22b85418b3eb066 [Location=[28715:28814](+)]     
+ Length of sequence-       100
+ Threshold for promoters -  0.20
+ Number of predicted promoters -      1
+ Promoter Pos:     81 LDF-  2.98
+ -10 box at pos.     66 GATTATTAT Score    62
+ -35 box at pos.     49 TTGATG    Score    52
+
+ Oligonucleotides from known TF binding sites:
+
+ No such sites for promoter at     81
+>AF083977______859d99a2a95f46c7acd518be9d80a646 [Location=[8133:8232](+)]       
+ Length of sequence-       100
+ Threshold for promoters -  0.20
+ Number of predicted promoters -      1
+ Promoter Pos:     65 LDF-  3.40
+ -10 box at pos.     50 GTGTAAATT Score    57
+ -35 box at pos.     25 TTCCAT    Score    30
+
+ Oligonucleotides from known TF binding sites:
+
+ For promoter at     65:
+        crp:  GATGTGTA at position      47 Score -   7
+        fis:  TGTAAATT at position      51 Score -  15
+>AF083977______877189226da448b69520062435b9eff9 [Location=[4684:4783](+)]       
+ Length of sequence-       100
+ Threshold for promoters -  0.20
+ Number of predicted promoters -      1
+ Promoter Pos:     70 LDF-  1.61
+ -10 box at pos.     55 AGGTAAAAG Score    44
+ -35 box at pos.     33 TTTAAA    Score    41
+
+ Oligonucleotides from known TF binding sites:
+
+ For promoter at     70:
+        fnr:  ATCAATAA at position      82 Score -   5
+>AF083977______8799bc455dc7472fa5320d049520809c [Location=[6324:6423](+)]       
+ Length of sequence-       100
+ Threshold for promoters -  0.20
+ Number of predicted promoters -      1
+ Promoter Pos:     72 LDF-  2.17
+ -10 box at pos.     57 CAGGAGATT Score     3
+ -35 box at pos.     36 TTTAAT    Score    36
+
+ Oligonucleotides from known TF binding sites:
+
+ For promoter at     72:
+       phoB:  TTTAATTA at position      17 Score -  11
+       arcA:  TTAATTAA at position      18 Score -  13
+       phoB:  TTTAATTA at position      36 Score -  11
+>AF083977______96833e587bcc43f59dc4548fc0837551 [Location=[24031:24130](+)]     
+ Length of sequence-       100
+ Threshold for promoters -  0.20
+ Number of predicted promoters -      1
+ Promoter Pos:     71 LDF-  1.18
+ -10 box at pos.     56 GGCTAAAAC Score    40
+ -35 box at pos.     38 TTTCCG    Score    36
+
+ Oligonucleotides from known TF binding sites:
+
+ No such sites for promoter at     71
+>AF083977______9d2dacf009dc40bb9e2722da91727290 [Location=[7555:7654](+)]       
+ Length of sequence-       100
+ Threshold for promoters -  0.20
+ Number of predicted promoters -      0
+>AF083977______9f38d3ec1ae7478faa4d4540bf4178f9 [Location=[23452:23551](+)]     
+ Length of sequence-       100
+ Threshold for promoters -  0.20
+ Number of predicted promoters -      0
+>AF083977______a028384e825d4a9cbfe130e05d734ee9 [Location=[23452:23551](+)]     
+ Length of sequence-       100
+ Threshold for promoters -  0.20
+ Number of predicted promoters -      0
+>AF083977______a33a343acfdf4f35a06288f7415a709d [Location=[29743:29842](+)]     
+ Length of sequence-       100
+ Threshold for promoters -  0.20
+ Number of predicted promoters -      1
+ Promoter Pos:     74 LDF-  1.16
+ -10 box at pos.     58 CGTTATTCC Score    27
+ -35 box at pos.     38 CTGACA    Score    31
+
+ Oligonucleotides from known TF binding sites:
+
+ No such sites for promoter at     74
+>AF083977______a6501700c2944bff9f08705983137a99 [Location=[7860:7959](+)]       
+ Length of sequence-       100
+ Threshold for promoters -  0.20
+ Number of predicted promoters -      0
+>AF083977______aa1489bf6a584fa1801a6a5914708a54 [Location=[27588:27687](+)]     
+ Length of sequence-       100
+ Threshold for promoters -  0.20
+ Number of predicted promoters -      1
+ Promoter Pos:     63 LDF-  0.29
+ -10 box at pos.     48 CGGTATCAG Score    34
+ -35 box at pos.     25 TGGCAA    Score    18
+
+ Oligonucleotides from known TF binding sites:
+
+ No such sites for promoter at     63
+>AF083977______afac62ceef3742d6ac26de3cb51e5a38 [Location=[21589:21688](+)]     
+ Length of sequence-       100
+ Threshold for promoters -  0.20
+ Number of predicted promoters -      0
+>AF083977______b18e5d1614c64ed8880831f3efe5ea4c [Location=[7371:7470](+)]       
+ Length of sequence-       100
+ Threshold for promoters -  0.20
+ Number of predicted promoters -      1
+ Promoter Pos:     61 LDF-  0.37
+ -10 box at pos.     45 GACTGAAAT Score    26
+ -35 box at pos.     22 ATGACA    Score    36
+
+ Oligonucleotides from known TF binding sites:
+
+ No such sites for promoter at     61
+>AF083977______b3fbbc6ed4a94f98bf2f9940116bcdcc [Location=[4962:5061](+)]       
+ Length of sequence-       100
+ Threshold for promoters -  0.20
+ Number of predicted promoters -      1
+ Promoter Pos:     68 LDF-  0.33
+ -10 box at pos.     53 CACTGAAAT Score    25
+ -35 box at pos.     31 GTGTCA    Score    20
+
+ Oligonucleotides from known TF binding sites:
+
+ For promoter at     68:
+       tyrR:  TGAGATTT at position      11 Score -   7
+       phoB:  TGTCATCA at position      32 Score -   5
+>AF083977______b3fbfe2b3d4b4e539bbe1104551bdbeb [Location=[29305:29404](+)]     
+ Length of sequence-       100
+ Threshold for promoters -  0.20
+ Number of predicted promoters -      0
+>AF083977______b9188f165aca4caabf2e719160050596 [Location=[11424:11523](+)]     
+ Length of sequence-       100
+ Threshold for promoters -  0.20
+ Number of predicted promoters -      0
+>AF083977______bfc730fe1c634899b55344f1c3ddf439 [Location=[23864:23963](+)]     
+ Length of sequence-       100
+ Threshold for promoters -  0.20
+ Number of predicted promoters -      0
+>AF083977______c1bfb30f146f4acca35ff728c650be0b [Location=[11914:12013](+)]     
+ Length of sequence-       100
+ Threshold for promoters -  0.20
+ Number of predicted promoters -      0
+>AF083977______c425781c88744fb6845ec2288f3254d0 [Location=[12216:12315](+)]     
+ Length of sequence-       100
+ Threshold for promoters -  0.20
+ Number of predicted promoters -      0
+>AF083977______cb992d46676542d88950f6cb1b0f163e [Location=[999:1098](+)]        
+ Length of sequence-       100
+ Threshold for promoters -  0.20
+ Number of predicted promoters -      1
+ Promoter Pos:     68 LDF-  4.54
+ -10 box at pos.     53 AGTTAAATT Score    61
+ -35 box at pos.     34 TAGCTA    Score    16
+
+ Oligonucleotides from known TF binding sites:
+
+ For promoter at     68:
+     rpoD18:  TTACACTT at position      45 Score -   9
+        crp:  TTAAATTG at position      55 Score -  10
+     rpoD17:  TATAGATT at position      70 Score -  11
+>AF083977______d1d7b0def66f4e828d8547c2cb3447c4 [Location=[12799:12898](+)]     
+ Length of sequence-       100
+ Threshold for promoters -  0.20
+ Number of predicted promoters -      0
+>AF083977______d20c15ebad2f4021b64494c2c146f25e [Location=[14454:14553](+)]     
+ Length of sequence-       100
+ Threshold for promoters -  0.20
+ Number of predicted promoters -      1
+ Promoter Pos:     78 LDF-  1.09
+ -10 box at pos.     63 TTTGATGAT Score    34
+ -35 box at pos.     43 ATGATG    Score    22
+
+ Oligonucleotides from known TF binding sites:
+
+ No such sites for promoter at     78
+>AF083977______e05db3de37bc4f869fab622557e90d07 [Location=[20854:20953](+)]     
+ Length of sequence-       100
+ Threshold for promoters -  0.20
+ Number of predicted promoters -      0
+>AF083977______e14737a1d8ac47f79b83b224fda66ed3 [Location=[21389:21488](+)]     
+ Length of sequence-       100
+ Threshold for promoters -  0.20
+ Number of predicted promoters -      0
+>AF083977______e2f41908d5b54791b275248fc4ca06f1 [Location=[9731:9830](+)]       
+ Length of sequence-       100
+ Threshold for promoters -  0.20
+ Number of predicted promoters -      1
+ Promoter Pos:     69 LDF-  0.65
+ -10 box at pos.     54 GGCTCTCAT Score    29
+ -35 box at pos.     33 TGGCCG    Score    18
+
+ Oligonucleotides from known TF binding sites:
+
+ For promoter at     69:
+       purR:  TTTCGTTT at position      62 Score -   6
+>AF083977______eb0b135207604bf4b6211bf9332dddd4 [Location=[8163:8262](-)]       
+ Length of sequence-       100
+ Threshold for promoters -  0.20
+ Number of predicted promoters -      0
+>AF083977______f16dc6faf89b46b188d245d4539bac19 [Location=[4215:4314](+)]       
+ Length of sequence-       100
+ Threshold for promoters -  0.20
+ Number of predicted promoters -      1
+ Promoter Pos:     67 LDF-  1.35
+ -10 box at pos.     52 CGTTGATAT Score    30
+ -35 box at pos.     31 TTTCCG    Score    36
+
+ Oligonucleotides from known TF binding sites:
+
+ No such sites for promoter at     67
+>AF083977______f5254b68c5704c78893d39a7b73d3fc5 [Location=[9863:9962](+)]       
+ Length of sequence-       100
+ Threshold for promoters -  0.20
+ Number of predicted promoters -      1
+ Promoter Pos:     80 LDF-  0.31
+ -10 box at pos.     68 GTGTATCTT Score    46
+ -35 box at pos.     47 CTGATA    Score    23
+
+ Oligonucleotides from known TF binding sites:
+
+ No such sites for promoter at     80
+>AF083977______ffc36c941d2b40378b2756b3baba66be [Location=[4442:4541](+)]       
+ Length of sequence-       100
+ Threshold for promoters -  0.20
+ Number of predicted promoters -      0
