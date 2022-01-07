@@ -1,0 +1,11 @@
+Done
+'''
+The extract_promoter_data() function errors if you give it a feature from the BPROM file
+which has a number of predicted promoters of 0. This makes sense, however it needs to be fixed.
+2 possibilities:
+    (1) Filter out the features which have "Number of predicted promoters -      0" from the
+        initial bprom file after reading it in
+        - This is fine as long as we don't need this data for anything
+        - This is also the best solution as it prevents this error from happening for other
+          data extractions
+'''

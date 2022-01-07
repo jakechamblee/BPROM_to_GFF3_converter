@@ -1,7 +1,7 @@
 import pandas as pd
 import re
 import regex
-from typing import List, Match
+from typing import List, Match, Tuple
 
 
 def parse_bprom_output():
@@ -36,43 +36,64 @@ def concatenate_then_split(contents: List[str]) -> List[str]:
     return features
 
 
-def extract_accession(feature: str):
+def remove_promoterless_features(features: List[str]) -> List[str]:
+    """For each concatenated feature string, removes the element
+       if the # of predicted promoters is 0"""
+    cleaned_features = features
+    for i, feature in enumerate(cleaned_features):
+        if " Number of predicted promoters -      0" in cleaned_features[i]:
+            del cleaned_features[i]
+
+    return cleaned_features
+
+
+def extract_accession(feature: str) -> str:
     """Extract position in genome. Gets any number of values '(.*)' between the brackets
     using 'lookbehind/lookright' (?<=) and 'lookahead/lookleft' regex assertions"""
     location: Match = re.search('(?<=Location\=\[)(.*)(?=\]\(.\)\])', feature)
+    location: str = location.group()
 
     return location
 
 
-def extract_data_for_feature(feature: str):
-    """Extracts all data from an element using regular expressions.
+def extract_strand_direction(feature: str):
+    """"""
+
+    return
+
+
+def extract_promoter_data(feature: str) -> Tuple[str]:
+    """Extracts all promoter data using regular expressions.
     Use for one element in the output of concatenate_then_split()"""
-    # These regexes need to match all EXCEPT whitespaces in many cases b/c otherwise
-    # they may match 2 digit but not 3 digit scores "  100" but not "   10" b/c
-    # the bprom output does not maintain the same # of whitespace characters
-    # if there are less digits (at least for the scoring)
-
-    feature_data = {}
-    # Extract accession
-    # accession = re.search('')
-
     # Extract promoter -10 and -35 sequences and scores
     # Gets everything between "-xx box at pos." and " Score"
-    minus10: Match = re.search('(?<=-10 box at pos\.)(.*)(?= Score)', feature)
-    minus35: Match = re.search('(?<=-35 box at pos\.)(.*)(?= Score)', feature)
+    minus10: Match = re.search('(?<=-10 box at pos.)(.*)(?= Score)(.*)', feature)
+    minus35: Match = re.search('(?<=-35 box at pos.)(.*)(?= Score)(.*)', feature)
 
-    # noinspection PyBroadException
-    try:
-        # Strip leading whitespace (which can be variable depending on # of digits)
-        minus10: str = minus10.group().lstrip()
-        minus35: str = minus35.group().lstrip()
-    except:
-        None
+    # Extracts the match and removes leading and trailing whitespace (which can be variable)
+    # (the bprom output does not maintain the same # of whitespace characters
+    # if there are less digits, at least for the scoring)
+    # minus10 = minus10.group()
+    minus10: List[str] = minus10.group().lstrip().split(' ')
+    minus10_pos: str = minus10[0]
+    minus10_seq: str = minus10[1]
+    minus10_score: str = minus10[-1]
+
+    minus35: List[str] = minus35.group().lstrip().split(' ')
+    minus35_pos: str = minus35[0]
+    minus35_seq: str = minus35[1]
+    minus35_score: str = minus35[-1]
+
+    return minus10_pos, minus10_seq, minus10_score, minus35_pos, minus35_seq, minus35_score
 
 
-    # Extract predicted transcription factor binding elements
+def extract_():
+    return
 
-    return minus10, minus35,
+
+def extract_tf_binding_elements():
+    """Extract predicted transcription factor binding elements"""
+    return
 
 
 # def get_section_indexes(contents: List[str]) -> List[str]:
@@ -136,12 +157,15 @@ def split_bprom(contents: List[str], feature_indexes: List[str]):
 if __name__ == '__main__':
     bprom_file = read_bprom_file('BPROM_output.txt')
     print(bprom_file)
-    #print(concatenate_then_split(bprom_file)[0])
-    accession = extract_accession(bprom_file[0])
-    concatenated_bprom_file = concatenate_then_split(bprom_file)
-    promoters = extract_data_for_feature(concatenated_bprom_file[0])
+    # print(concatenate_then_split(bprom_file)[0])
+    concatenated_bprom_file: List[str] = concatenate_then_split(bprom_file)
+    print(concatenated_bprom_file)
+    accession = extract_accession(concatenated_bprom_file[0])
+    promoters = extract_promoter_data(concatenated_bprom_file[1])
 
-    print(' location:', accession.group(),
-          '\n', '-10 promoter:', promoters[0],
-          '\n', '-35 promoter:', promoters[1],
+    print(' location:', accession,
+          '\n', '-10 promoter:', promoters[0:3],
+          '\n', '-35 promoter:', promoters[3:6],
+         # '\n', remove_promoterless_features(concatenated_bprom_file)[2]
+          '\n',
           )
