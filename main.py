@@ -1,7 +1,7 @@
 import pandas as pd
 import re
 import regex
-from typing import List, Match, Tuple
+from typing import List, Match, Tuple, Dict
 
 
 def parse_bprom_output():
@@ -44,8 +44,8 @@ def remove_promoterless_features(features: List[str]) -> List[str]:
     for i, feature in enumerate(cleaned_features):
         if "Number of predicted promoters -      0" in cleaned_features[i]:
             indices_to_delete.append(i)
-    # Need to delete in reverse order, otherwise it changes the list indices after
-    # the one you deleted, and you delete subsequent elements at the wrong position
+    # Must delete in reverse order, otherwise it changes the list indices after
+    # the element deleted, and you delete subsequent elements at i+1, i+2, i+3, etc
     for i in sorted(indices_to_delete, reverse=True):
         del cleaned_features[i]
 
@@ -54,14 +54,16 @@ def remove_promoterless_features(features: List[str]) -> List[str]:
 
 def extract_accession(feature: str) -> str:
     """Extract accession"""
-    return
+    accession: Match = re.search('[\w](.*)(?=_)', feature)
+    accession: str = accession.group().replace('_', '').strip()
+
+    return accession
 
 
 def extract_position(feature: str) -> str:
     """Extract position in genome. Gets any number of values '(.*)' between the brackets
     using 'lookbehind/lookright' (?<=PATTERN) and 'lookahead/lookleft' regex assertions"""
     # Matches for 'Location=[(.*)]('
-    # alternative that also works: '(?<=Location=\\[)(.*)(?=]\\(.\\)])'
     location: Match = re.search('(?<=Location=\\[)(.*)(?=]\\()', feature)
     location: str = location.group()
 
@@ -77,7 +79,7 @@ def extract_strand_direction(feature: str) -> str:
     return direction
 
 
-def extract_promoter_data(feature: str) -> Tuple[str]:
+def extract_promoter_data(feature: str):
     """Extracts all promoter data using regular expressions.
     Use for one element in the output of concatenate_then_split()"""
     # Extract promoter -10 and -35 sequences and scores
@@ -88,7 +90,6 @@ def extract_promoter_data(feature: str) -> Tuple[str]:
     # Extracts the match and removes leading and trailing whitespace (which can be variable)
     # (the bprom output does not maintain the same # of whitespace characters
     # if there are less digits, at least for the scoring)
-    # minus10 = minus10.group()
     minus10: List[str] = minus10.group().lstrip().split(' ')
     minus10_pos: str = minus10[0]
     minus10_seq: str = minus10[1]
@@ -98,8 +99,13 @@ def extract_promoter_data(feature: str) -> Tuple[str]:
     minus35_pos: str = minus35[0]
     minus35_seq: str = minus35[1]
     minus35_score: str = minus35[-1]
-
-    return minus10_pos, minus10_seq, minus10_score, minus35_pos, minus35_seq, minus35_score
+    promoter_data = {'minus10_pos': minus10_pos,
+                     'minus10_seq': minus10_seq,
+                     'minus10_score': minus10_score,
+                     'minus35_pos': minus35_pos,
+                     'minus35_seq': minus35_seq,
+                     'minus35_score': minus35_score}
+    return promoter_data
 
 
 def extract_tf_binding_elements():
@@ -118,12 +124,29 @@ def extract_tf_binding_elements():
 #     return feature_indexes
 
 
-def split_bprom(contents: List[str], feature_indexes: List[str]):
-    """Split the BPROM contents by each feature"""
-    # test = [contents.split() for content in contents]
+def extract_data_for_all_features(features: List[str]):
+    """Loops through cleaned bprom output extracting all data of interest"""
+    # Pass List[str] containing each feature [str] and it's data
+    # Call all the extraction functions on each of these features [str]
+    # Add this data to a object (Dataframe? Dictionary?) keeping feature data together
+    data: List[Dict[str, str]] = []
+    for feature in features:
+        # loop through features, a List[str] containing each feature [str] in the
+        # original bprom format as a single string, but cleaned of irrelevant data
+        promoter_data = extract_promoter_data(feature)
+        data.append(
+            {'accession': extract_accession(feature),
+             'position': extract_position(feature),
+             'strand_direction': extract_strand_direction(feature),
+             'minus10_pos': promoter_data['minus10_pos'],
+             'minus10_seq': promoter_data['minus10_seq'],
+             'minus10_score': promoter_data['minus10_score'],
+             'minus35_pos': promoter_data['minus35_pos'],
+             'minus35_seq': promoter_data['minus35_seq'],
+             'minus35_score': promoter_data['minus35_score'],
+             })
 
-    return None
-
+    return data
 
 # One way to do this is to take this list of strings of lines and loop through it
 # For each element, check for certain characters such as ">",
@@ -169,14 +192,18 @@ if __name__ == '__main__':
     # print(concatenate_then_split(bprom_file)[0])
     concatenated_bprom_file: List[str] = concatenate_then_split(bprom_file)
     working_file = remove_promoterless_features(concatenated_bprom_file)
-    print(' concat file w/o promoterless features: ', working_file)
+    # print(' concat file w/o promoterless features: ', working_file)
     position = extract_position(concatenated_bprom_file[0])
     promoters = extract_promoter_data(concatenated_bprom_file[1])
     strand_direction = extract_strand_direction(working_file[2])
+    accession = extract_accession(working_file[0])
 
+    # print(remove_promoterless_features(concatenated_bprom_file)[2])
+    # print('working_file: ', working_file[0])
     print(' position:', position,
-          '\n', '-10 promoter:', promoters[0:3],
-          '\n', '-35 promoter:', promoters[3:6],
-         # '\n', remove_promoterless_features(concatenated_bprom_file)[2]
-          '\n', 'strand direction: ', strand_direction
+          '\n', '-10 promoter:', promoters['minus10_pos'], promoters['minus10_seq'],
+          '\n', '-35 promoter:', promoters['minus35_pos'], promoters['minus35_seq'],
+          '\n', 'strand direction: ', strand_direction,
+          '\n', 'accession: ', accession,
           )
+    print(extract_data_for_all_features(working_file))

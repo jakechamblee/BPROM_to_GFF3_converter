@@ -16,3 +16,5 @@ Del alters the indexes after you delete an element, therefore when looping throu
 deleting elements in a list, you must delete in REVERSE ORDER or you will delete
 at i+1 after the first deletion, i+2 after the second, etc instead of deleting at i
 as intended.
+
+To Do
