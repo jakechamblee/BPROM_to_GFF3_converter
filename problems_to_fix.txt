@@ -1,4 +1,4 @@
-Done
+FIXED
 '''
 The extract_promoter_data() function errors if you give it a feature from the BPROM file
 which has a number of predicted promoters of 0. This makes sense, however it needs to be fixed.
@@ -9,3 +9,10 @@ which has a number of predicted promoters of 0. This makes sense, however it nee
         - This is also the best solution as it prevents this error from happening for other
           data extractions
 '''
+FIXED
+For some reason, removing the ones with predicted promoters = 0 is not consistently
+removing the features. It removes most, but not all?? Very confusing.
+Del alters the indexes after you delete an element, therefore when looping through and
+deleting elements in a list, you must delete in REVERSE ORDER or you will delete
+at i+1 after the first deletion, i+2 after the second, etc instead of deleting at i
+as intended.

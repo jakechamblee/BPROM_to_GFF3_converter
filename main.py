@@ -38,28 +38,43 @@ def concatenate_then_split(contents: List[str]) -> List[str]:
 
 def remove_promoterless_features(features: List[str]) -> List[str]:
     """For each concatenated feature string, removes the element
-       if the # of predicted promoters is 0"""
+       if the # of predicted promoters is 0. Call on the concatenated string"""
     cleaned_features = features
+    indices_to_delete = []
     for i, feature in enumerate(cleaned_features):
-        if " Number of predicted promoters -      0" in cleaned_features[i]:
-            del cleaned_features[i]
+        if "Number of predicted promoters -      0" in cleaned_features[i]:
+            indices_to_delete.append(i)
+    # Need to delete in reverse order, otherwise it changes the list indices after
+    # the one you deleted, and you delete subsequent elements at the wrong position
+    for i in sorted(indices_to_delete, reverse=True):
+        del cleaned_features[i]
 
     return cleaned_features
 
 
 def extract_accession(feature: str) -> str:
+    """Extract accession"""
+    return
+
+
+def extract_position(feature: str) -> str:
     """Extract position in genome. Gets any number of values '(.*)' between the brackets
-    using 'lookbehind/lookright' (?<=) and 'lookahead/lookleft' regex assertions"""
-    location: Match = re.search('(?<=Location\=\[)(.*)(?=\]\(.\)\])', feature)
+    using 'lookbehind/lookright' (?<=PATTERN) and 'lookahead/lookleft' regex assertions"""
+    # Matches for 'Location=[(.*)]('
+    # alternative that also works: '(?<=Location=\\[)(.*)(?=]\\(.\\)])'
+    location: Match = re.search('(?<=Location=\\[)(.*)(?=]\\()', feature)
     location: str = location.group()
 
     return location
 
 
-def extract_strand_direction(feature: str):
-    """"""
+def extract_strand_direction(feature: str) -> str:
+    """Extract strand direction for a feature, - or +"""
+    # Matches for '(.)'
+    direction: Match = re.search('(?<=\\().(?=\\))', feature)
+    direction: str = direction.group()
 
-    return
+    return direction
 
 
 def extract_promoter_data(feature: str) -> Tuple[str]:
@@ -85,10 +100,6 @@ def extract_promoter_data(feature: str) -> Tuple[str]:
     minus35_score: str = minus35[-1]
 
     return minus10_pos, minus10_seq, minus10_score, minus35_pos, minus35_seq, minus35_score
-
-
-def extract_():
-    return
 
 
 def extract_tf_binding_elements():
@@ -123,8 +134,6 @@ def split_bprom(contents: List[str], feature_indexes: List[str]):
 # Better approach would be to make a list of lists separated by the text in
 # each section in-between the ">".
 
-# Alternative approaches?
-
 
 # What do we want from the BPROM output:
 # (1) Location/Pos, so what's in brackets [] on the line starting with >
@@ -156,16 +165,18 @@ def split_bprom(contents: List[str], feature_indexes: List[str]):
 
 if __name__ == '__main__':
     bprom_file = read_bprom_file('BPROM_output.txt')
-    print(bprom_file)
+    print(' bprom_file :', bprom_file)
     # print(concatenate_then_split(bprom_file)[0])
     concatenated_bprom_file: List[str] = concatenate_then_split(bprom_file)
-    print(concatenated_bprom_file)
-    accession = extract_accession(concatenated_bprom_file[0])
+    working_file = remove_promoterless_features(concatenated_bprom_file)
+    print(' concat file w/o promoterless features: ', working_file)
+    position = extract_position(concatenated_bprom_file[0])
     promoters = extract_promoter_data(concatenated_bprom_file[1])
+    strand_direction = extract_strand_direction(working_file[2])
 
-    print(' location:', accession,
+    print(' position:', position,
           '\n', '-10 promoter:', promoters[0:3],
           '\n', '-35 promoter:', promoters[3:6],
          # '\n', remove_promoterless_features(concatenated_bprom_file)[2]
-          '\n',
+          '\n', 'strand direction: ', strand_direction
           )
