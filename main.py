@@ -1,7 +1,7 @@
 import pandas as pd
 import re
 import regex
-from typing import List
+from typing import List, Match
 
 
 def parse_bprom_output():
@@ -36,6 +36,14 @@ def concatenate_then_split(contents: List[str]) -> List[str]:
     return features
 
 
+def extract_accession(feature: str):
+    """Extract position in genome. Gets any number of values '(.*)' between the brackets
+    using 'lookbehind/lookright' (?<=) and 'lookahead/lookleft' regex assertions"""
+    location: Match = re.search('(?<=Location\=\[)(.*)(?=\]\(.\)\])', feature)
+
+    return location
+
+
 def extract_data_for_feature(feature: str):
     """Extracts all data from an element using regular expressions.
     Use for one element in the output of concatenate_then_split()"""
@@ -46,20 +54,25 @@ def extract_data_for_feature(feature: str):
 
     feature_data = {}
     # Extract accession
-    #accession = re.search('')
+    # accession = re.search('')
 
-    # Extract position in genome. Gets any number of values '(.*)' between the brackets
-    # using 'lookbehind/lookright' (?<=) and 'lookahead/lookleft' regex assertions
-    location = re.search('(?<=Location\=\[)(.*)(?=\]\(.\)\])', feature)
+    # Extract promoter -10 and -35 sequences and scores
+    # Gets everything between "-xx box at pos." and " Score"
+    minus10: Match = re.search('(?<=-10 box at pos\.)(.*)(?= Score)', feature)
+    minus35: Match = re.search('(?<=-35 box at pos\.)(.*)(?= Score)', feature)
 
-    # Extract promoter -10 sequence and score
-    minus10_pos = regex.search('(?<=-10 box at pos\. {4,5})(.*)(?= Score)', feature)
-    minus10_seq = regex.search('(?<=-10 box at pos\. {4,5})(.*)(?= Score)', feature)
-    # Extract promoter -35 sequence and score
+    # noinspection PyBroadException
+    try:
+        # Strip leading whitespace (which can be variable depending on # of digits)
+        minus10: str = minus10.group().lstrip()
+        minus35: str = minus35.group().lstrip()
+    except:
+        None
+
 
     # Extract predicted transcription factor binding elements
 
-    return location, minus10_pos, minus10_seq
+    return minus10, minus35,
 
 
 # def get_section_indexes(contents: List[str]) -> List[str]:
@@ -121,12 +134,14 @@ def split_bprom(contents: List[str], feature_indexes: List[str]):
 # Col 9 Attributes (can shove all the extra information in here possibly)
 
 if __name__ == '__main__':
-    print(read_bprom_file('BPROM_output.txt'))
-    #print(type(read_bprom_file('BPROM_output.txt')))
-    #print(get_section_indexes(read_bprom_file('BPROM_output.txt')))
-    # print(split_bprom(get_section_indexes(read_bprom_file('BPROM_output.txt'))))
-    print(concatenate_then_split(read_bprom_file('BPROM_output.txt')))
-    regex = extract_data_for_feature(concatenate_then_split(read_bprom_file('BPROM_output.txt'))[0])
-    print(regex[0].group(),
-        regex[1].group()
+    bprom_file = read_bprom_file('BPROM_output.txt')
+    print(bprom_file)
+    #print(concatenate_then_split(bprom_file)[0])
+    accession = extract_accession(bprom_file[0])
+    concatenated_bprom_file = concatenate_then_split(bprom_file)
+    promoters = extract_data_for_feature(concatenated_bprom_file[0])
+
+    print(' location:', accession.group(),
+          '\n', '-10 promoter:', promoters[0],
+          '\n', '-35 promoter:', promoters[1],
           )
