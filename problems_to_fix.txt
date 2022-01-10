@@ -24,4 +24,8 @@ To Do
 
 - Need to calculate the promoter START and END positions in the genome using the
 retrieved test location START and END (obtained with extract_test_seq_position())
-    -PROBLEM: Is the "Promoter Pos:" given
+    - What constitutes the start and end of a promoter? Is the -35 position the START?
+    Is the -35 position + 35 the END of the promoter?
+    - Why doesn't the -35 position + 35 equal "Promoter Pos:     X" in the BPROM output??
+    - When calculating the - strand start and end positions, is the -35 box position counting
+    up from the start CDS or the end CDS??
