@@ -219,28 +219,11 @@ def write_to_gff3(dataframe):
     return
 
 
-# GFF3 is a tab delimited text file format, so ultimately need to get relevant data into
-# a tab delimited format
-
-
-# Col 1 Sequence ID (this would be the accession # for the genome. Would need to get this
-# from before this step, as it is not present in the BPROM output)
-# Col 2 Source = BPROM for all as this is a BPROM output -> GFF3 converter
-# Col 3 Feature Type = "promoter"
-# Col 4 Start ONE BASE OFFSET (+1)
-# Col 5 End ONE BASE OFFSET (+1)
-# Col 6 Score (Confidence score of the source for the annotation - put BPROM scores here)
-# Col 7 Strand ("+" or "-")
-# Col 8 Phase = "." because 0, 1, 2 for CDS, "." for everything else
-# Col 9 Attributes (can shove all the extra information in here possibly)
-
 if __name__ == '__main__':
     bprom_file = read_bprom_file('BPROM_output.txt')
     print(' bprom_file :', bprom_file)
-    # print(concatenate_then_split(bprom_file)[0])
     concatenated_bprom_file: List[str] = concatenate_then_split(bprom_file)
     working_file = remove_promoterless_features(concatenated_bprom_file)
-    # print(' concat file w/o promoterless features: ', working_file)
     position = extract_test_seq_position(concatenated_bprom_file[0])
     promoters = extract_promoter_data(concatenated_bprom_file[1])
     strand_direction = extract_strand_direction(working_file[2])
