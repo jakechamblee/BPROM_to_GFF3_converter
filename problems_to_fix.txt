@@ -18,3 +18,10 @@ at i+1 after the first deletion, i+2 after the second, etc instead of deleting a
 as intended.
 
 To Do
+
+- Test other BPROM output files
+- Convert data to GFF3
+
+- Need to calculate the promoter START and END positions in the genome using the
+retrieved test location START and END (obtained with extract_test_seq_position())
+    -PROBLEM: Is the "Promoter Pos:" given

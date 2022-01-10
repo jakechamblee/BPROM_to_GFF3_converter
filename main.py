@@ -1,14 +1,9 @@
 import pandas as pd
 import re
-import regex
-from typing import List, Match, Tuple, Dict
+from typing import List, Match, Dict, TextIO
 
 
-def parse_bprom_output():
-    return
-
-
-def read_bprom_file(bprom_file) -> List[str]:
+def read_bprom_file(bprom_file: TextIO) -> List[str]:
     """Creates list of strings, with each element containing a line from the file"""
     contents: List[str] = []
 
@@ -27,7 +22,7 @@ def concatenate_then_split(contents: List[str]) -> List[str]:
     # Concatenates the entire file into one large string
     concat_contents: str = ''.join(contents)
 
-    # Removing the empty string '' at element 0
+    # Removing the empty string '' at element 0 used to make the join
     concat_contents: str = concat_contents[1:]
 
     # Splits the file into a list of strings on ">"
@@ -60,12 +55,12 @@ def extract_accession(feature: str) -> str:
     return accession
 
 
-def extract_position(feature: str) -> str:
+def extract_test_seq_position(feature: str) -> str:
     """Extract position in genome. Gets any number of values '(.*)' between the brackets
     using 'lookbehind/lookright' (?<=PATTERN) and 'lookahead/lookleft' regex assertions"""
     # Matches for 'Location=[(.*)]('
     location: Match = re.search('(?<=Location=\\[)(.*)(?=]\\()', feature)
-    location: str = location.group()
+    location: str = location.group().split(':')
 
     return location
 
@@ -79,7 +74,7 @@ def extract_strand_direction(feature: str) -> str:
     return direction
 
 
-def extract_promoter_data(feature: str):
+def extract_promoter_data(feature: str) -> Dict[str, str]:
     """Extracts all promoter data using regular expressions.
     Use for one element in the output of concatenate_then_split()"""
     # Extract promoter -10 and -35 sequences and scores
@@ -108,68 +103,114 @@ def extract_promoter_data(feature: str):
     return promoter_data
 
 
+def extract_LDF_score(feature: str) -> str:
+    """Extract LDF score"""
+    LDF = re.search('(?<=LDF-)(.*)', feature)
+    LDF = LDF.group().strip()
+
+    return LDF
+
+
+def extract_promoter_position(feature: str):
+    """Extract promoter position (not -10 or -35 box position)"""
+    # Get 'Promoter Pos:     X' data
+    promoter_pos: Match = re.search('(?<=Promoter Pos:)(.*)(?=LDF)', feature)
+    promoter_pos: int = int(promoter_pos.group().strip())
+
+    # Get start and end positions from 'Location=[XXX:YYYY]'
+    test_seq_position: List[str] = extract_test_seq_position(feature).split(':')
+    test_seq_start: int = int(test_seq_position[0])
+    test_seq_end: int = int(test_seq_position[1])
+
+    # Now need to calculate promoter position with respect to the genome
+    # Get's -10 position and -35 position
+    # -35 position is the START, Promoter Pos is the end?? Or -10 + 10 is the end??
+
+    # IMPORTANT!! Whether or not you add or subtract to calculate the promoter start
+    # position depends on whether we're on the + or - strand! Must take into account.
+    direction: str = extract_strand_direction(feature)
+
+    if direction == '+':
+        # start = test_seq/CDS start + minus35 position
+        # end = start + 35
+        pass
+    elif direction == '-':
+        # The workflow Jolene uses is smart enough to correctly pull upstream
+        # for both + and - strands (i.e., pulls left for +, pulls right for -)
+        # THEREFORE, for a gene with a start at 930 on the + strand, it pulls 830:930
+        # And for a gene with a start at 930 on the - strand, it pulls 930:1030
+        pass
+    else:
+        assert "Error: Strand data neither \'+\' nor \'-\'"
+
+    calculated_promoter_pos: List[int] = [
+        promoter_pos + test_seq_end,
+        promoter_pos + test_seq_start,
+                                         ]
+
+    return calculated_promoter_pos
+
+
 def extract_tf_binding_elements():
     """Extract predicted transcription factor binding elements"""
     return
 
 
-# def get_section_indexes(contents: List[str]) -> List[str]:
-#     """Gets the starting indexes of each '>' separated section"""
-#     feature_indexes = []
-#     for i, line in enumerate(contents):
-#         # Want to figure out the windows in the list for each section, so
-#         if line.startswith(">"):
-#             feature_indexes.append(i)
-#
-#     return feature_indexes
-
-
-def extract_data_for_all_features(features: List[str]):
+def extract_data_for_all_features(features: List[str]) -> List[List[str]]:
     """Loops through cleaned bprom output extracting all data of interest"""
-    # Pass List[str] containing each feature [str] and it's data
-    # Call all the extraction functions on each of these features [str]
-    # Add this data to a object (Dataframe? Dictionary?) keeping feature data together
-    data: List[Dict[str, str]] = []
+    data: List[List[str]] = []
     for feature in features:
         # loop through features, a List[str] containing each feature [str] in the
         # original bprom format as a single string, but cleaned of irrelevant data
         promoter_data = extract_promoter_data(feature)
+        location: List[str] = extract_test_seq_position(feature)
         data.append(
-            {'accession': extract_accession(feature),
-             'position': extract_position(feature),
-             'strand_direction': extract_strand_direction(feature),
-             'minus10_pos': promoter_data['minus10_pos'],
-             'minus10_seq': promoter_data['minus10_seq'],
-             'minus10_score': promoter_data['minus10_score'],
-             'minus35_pos': promoter_data['minus35_pos'],
-             'minus35_seq': promoter_data['minus35_seq'],
-             'minus35_score': promoter_data['minus35_score'],
-             })
+            [extract_accession(feature),            # Seqid col
+             'bprom',                               # Source col
+             'promoter',                            # Type col
+             location[0],                           # Start col
+             location[1],                           # End col
+             extract_strand_direction(feature),
+             extract_LDF_score(feature),
+             extract_promoter_position(feature),
+             promoter_data['minus10_pos'],
+             promoter_data['minus10_seq'],
+             promoter_data['minus10_score'],
+             promoter_data['minus35_pos'],
+             promoter_data['minus35_seq'],
+             promoter_data['minus35_score'],
+             ])
 
     return data
 
-# One way to do this is to take this list of strings of lines and loop through it
-# For each element, check for certain characters such as ">",
-# " Number of predicted promoters -" , etc.
-# If found, then get element[position_of_desired_piece_of_data]
-# Problem with this approach is that it will break if BPROM's output format changes
 
-# Better approach would be to make a list of lists separated by the text in
-# each section in-between the ">".
+def convert_to_dataframe(extracted_data: List[List[str]]):
+    """Convert extracted data to Pandas dataframe with gff3 columns"""
+
+    df = pd.DataFrame()
+    # gff3
+    # gff3_columns = Seqid	Source	Type	Start	End	Score	Strand	Phase	Attributes
+    # Create Dataframe, then read in data in order to fill the columns.
+    # So, for each dictionary in the list of dictionaries, add for each col
+    # Col (1) Accession (as Seqid)
+    # Col (2) bprom (as Source)
+    # Col (3) promoter (but this might be incorrect)
+    # Col (4) start and (5) end positions
+    # Col (6) LDF Score (Score)
+    # Col (7) strand_direction, '+' or '-' (strand)
+    # Col (8) phase = '.'
+    # Col (9) (attributes)
+
+    return
 
 
-# What do we want from the BPROM output:
-# (1) Location/Pos, so what's in brackets [] on the line starting with >
-# (2) LDF score, so after "LDF-  "
-# (3) Promoter pos, so the number after "Promoter Pos:     "
-# (4) -10 box pos and nucleotide sequence and score
-# (5) -35 box pos and nucleotide sequence and score
-# (6) Get all predicted binding genes
+def write_to_gff3(dataframe):
+    """Create a gff3 file by using Pandas to tsv"""
+    with open(extracted_data, 'r') as rf:
+        return
 
-# What we need from the BPROM output:
-# (1) Accession # of the genome for Col 1
-# (2) Strand of each feature for Col 2
-# (3) The position of the promoter features **with respect to the genome**
+    return
+
 
 # GFF3 is a tab delimited text file format, so ultimately need to get relevant data into
 # a tab delimited format
@@ -193,7 +234,7 @@ if __name__ == '__main__':
     concatenated_bprom_file: List[str] = concatenate_then_split(bprom_file)
     working_file = remove_promoterless_features(concatenated_bprom_file)
     # print(' concat file w/o promoterless features: ', working_file)
-    position = extract_position(concatenated_bprom_file[0])
+    position = extract_test_seq_position(concatenated_bprom_file[0])
     promoters = extract_promoter_data(concatenated_bprom_file[1])
     strand_direction = extract_strand_direction(working_file[2])
     accession = extract_accession(working_file[0])
