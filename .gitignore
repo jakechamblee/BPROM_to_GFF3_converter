@@ -2,6 +2,12 @@
 .idea/
 .idea
 **/.idea
+.inspectionProfiles/
+.inspectionProfiles/misc.xml
+.inspectionProfiles/modules.xml
+.inspectionProfiles/vcs.xml
+.inspectionProfiles/workspace.xml
+.inspectionProfiles/BPROM_to_GFF3_converter_.iml
 
 
 
