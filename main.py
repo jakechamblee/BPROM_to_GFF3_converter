@@ -180,8 +180,9 @@ def calculate_promoter_position(feature: str):
         minus35_pos: int = promoter_data['minus35_pos']
         minus35_pos_in_context_of_genome: int = test_cds_location_end_pos - minus35_pos
 
-        start: int = test_cds_location_end_pos - minus35_pos
-        end: int = test_cds_location_end_pos - promoter_pos
+        # The start and end are reversed
+        end: int = test_cds_location_end_pos - minus35_pos
+        start: int = test_cds_location_end_pos - promoter_pos
 
         calculated_promoter_positions: List[int] = [
             start, end, minus10_pos_in_context_of_genome, minus35_pos_in_context_of_genome]
@@ -243,6 +244,8 @@ def write_to_gff3(dataframe):
     year, month, day = date.today().year, date.today().month, date.today().day
 
     with open(f'{year}_{month}_{day}_bprom_as_gff3_{accession}.txt', 'w') as wf:
+        # Header so Galaxy can recognize as GFF3
+        wf.write('##gff-version 3\n')
         for line in tsv:
             wf.write(line)
 
@@ -270,3 +273,5 @@ if __name__ == '__main__':
 
     # Actual function for converting the BPROM output to gff3
     convert_bprom_output_to_gff3('BPROM_output.txt')
+    convert_bprom_output_to_gff3('Galaxy138-[BPROM_T7_sigma70_predictions].txt')
+    convert_bprom_output_to_gff3('Galaxy177-[Concatenated_datasets].txt')
