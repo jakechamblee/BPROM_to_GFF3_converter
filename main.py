@@ -1,6 +1,8 @@
+import datetime
 import pandas as pd
 import re
-from typing import List, Match, Dict, TextIO
+from typing import List, Match, Dict, TextIO, Union
+from datetime import date
 
 
 def read_bprom_file(bprom_file: TextIO) -> List[str]:
@@ -32,8 +34,8 @@ def concatenate_then_split(contents: List[str]) -> List[str]:
 
 
 def remove_promoterless_features(features: List[str]) -> List[str]:
-    """For each concatenated feature string, removes the element
-       if the # of predicted promoters is 0. Call on the concatenated string"""
+    """For each concatenated feature string passed, removes the element
+       if the # of predicted promoters is 0."""
     cleaned_features = features
     indices_to_delete = []
     for i, feature in enumerate(cleaned_features):
@@ -94,37 +96,47 @@ def extract_promoter_data(feature: str) -> Dict[str, str]:
     minus35_pos: int = int(minus35[0])
     minus35_seq: str = minus35[1]
     minus35_score: str = minus35[-1]
-    promoter_data = {  # 'minus10_pos': minus10_pos,
+
+    # Can change these keys to change the column 9
+    promoter_data: Dict[str, Union[str, int]] = {
+        'minus10_pos': minus10_pos,
         'minus10_seq': minus10_seq,
-        # 'minus10_score': minus10_score,
+        'minus10_score': minus10_score,
         'minus35_pos': minus35_pos,
         'minus35_seq': minus35_seq,
-        # 'minus35_score': minus35_score
+        'minus35_score': minus35_score
     }
     return promoter_data
 
 
-def convert_extracted_promoter_data_to_ID_column_format(promoter_data: Dict[str, str]) -> str:
+def convert_extracted_promoter_data_to_ID_column_format(
+        promoter_data: Dict[str, Union[str, int]],
+        calculated_promoter_positions: List[int]) -> str:
     """Converts input data to the GFF3 ID column (column 9) format, a semicolon separated
        list of values providing additional information about each feature"""
-    promoter_data: List[str] = [f'{key}={value}' for key, value in promoter_data.items()]
-    promoter_data: str = 'Note=' + ';'.join(promoter_data)
+    # Replaces the BPROM output positions with the calculated ones
+    minus_10_calculated: int = calculated_promoter_positions[2]
+    minus_35_calculated: int = calculated_promoter_positions[3]
+    promoter_data['minus10_pos'] = minus_10_calculated
+    promoter_data['minus35_pos'] = minus_35_calculated
+
+    # Creates the column 9 string (attributes)
+    promoter_data: List[Union[str, int]] = [f'{key}={value}' for key, value in promoter_data.items()]
+    promoter_data: str = 'Description=Predicted promoter data;' + 'Note=' + ','.join(promoter_data) + ';'
     return promoter_data
 
 
 def extract_LDF_score(feature: str) -> str:
     """Extract LDF score"""
-    LDF = re.search('(?<=LDF-)(.*)', feature)
-    LDF = LDF.group().strip()
+    LDF: Match = re.search('(?<=LDF-)(.*)', feature)
+    LDF: str = LDF.group().strip()
 
     return LDF
 
 
-def extract_promoter_position(feature: str):
-    """Extract promoter position (not -10 or -35 box position) based on BPROM predictions.
-       Calculates the predicted promoter position in the context of the genome and CDS
-       used to make the prediction."""
-    # Get 'Promoter Pos:     X' data
+def calculate_promoter_position(feature: str):
+    """Calculate promoter positions (in the context of the genome) based on BPROM predictions."""
+    # Get 'Promoter Pos:     X' data. This refers to the predicted transcriptional start site!
     promoter_pos: Match = re.search('(?<=Promoter Pos:)(.*)(?=LDF)', feature)
     promoter_pos: int = int(promoter_pos.group().strip())
 
@@ -133,9 +145,7 @@ def extract_promoter_position(feature: str):
     test_cds_location_start_pos: int = int(test_seq_position[0])
     test_cds_location_end_pos: int = int(test_seq_position[1])
 
-    # Get -35 promoter position
-    promoter_data = extract_promoter_data(feature)
-    minus35_pos: int = promoter_data['minus35_pos']
+    promoter_data: Dict[str, Union[str, int]] = extract_promoter_data(feature)
 
     ''' IMPORTANT!! Whether or not you add or subtract to calculate the promoter start
     # position depends on whether we're on the + or - strand!
@@ -147,28 +157,39 @@ def extract_promoter_position(feature: str):
     direction: str = extract_strand_direction(feature)
 
     if direction == '+':
-        # Start = index 0; End = index 1
+        # BPROM starts counting from the LEFT boundary for + strand test sequences (as expected)
+        # Get -10 promoter position
+        minus10_pos: int = promoter_data['minus10_pos']
+        minus10_pos_in_context_of_genome: int = test_cds_location_start_pos + minus10_pos
+        # Get -35 promoter position
+        minus35_pos: int = promoter_data['minus35_pos']
+        minus35_pos_in_context_of_genome: int = test_cds_location_start_pos + minus35_pos
+
         start: int = test_cds_location_start_pos + minus35_pos
-        end: int = start + 35
-        calculated_promoter_pos: List[int] = [start, end]
-        return calculated_promoter_pos
+        end: int = test_cds_location_start_pos + promoter_pos
+
+        calculated_promoter_positions: List[int] = [
+            start, end, minus10_pos_in_context_of_genome, minus35_pos_in_context_of_genome]
+        return calculated_promoter_positions
 
     elif direction == '-':
-        # NEED TO CHECK/FIX THIS. Calculation for - strand may be wrong. #
+        # BPROM starts counting from the RIGHT boundary for - strand test sequences
+        # Get -10 promoter position
+        minus10_pos: int = promoter_data['minus10_pos']
+        minus10_pos_in_context_of_genome: int = test_cds_location_end_pos - minus10_pos
+        # Get -35 promoter position
+        minus35_pos: int = promoter_data['minus35_pos']
+        minus35_pos_in_context_of_genome: int = test_cds_location_end_pos - minus35_pos
+
         start: int = test_cds_location_end_pos - minus35_pos
-        end: int = start - 35
-        calculated_promoter_pos: List[int] = [start, end]
-        return calculated_promoter_pos
+        end: int = test_cds_location_end_pos - promoter_pos
+
+        calculated_promoter_positions: List[int] = [
+            start, end, minus10_pos_in_context_of_genome, minus35_pos_in_context_of_genome]
+        return calculated_promoter_positions
 
     else:
         assert "Error: Strand data neither \'+\' nor \'-\'"
-
-    calculated_promoter_pos: List[int] = [
-        promoter_pos + test_cds_location_end_pos,
-        promoter_pos + test_cds_location_start_pos,
-    ]
-
-    return calculated_promoter_pos
 
 
 def extract_tf_binding_elements():
@@ -176,22 +197,24 @@ def extract_tf_binding_elements():
     return
 
 
-def extract_data_for_all_features(features: List[str]) -> List[List[str]]:
-    """Loops through cleaned bprom output extracting all data of interest"""
-    data: List[List[str]] = []
+def extract_data_for_all_features(features: List[str]) -> List[List[Union[str, int]]]:
+    """Loops through cleaned bprom output extracting all data of interest and builds the
+       structure for loading into a dataframe"""
+    data: List[List[Union[str, int]]] = []
     for feature in features:
         # loop through features, a List[str] containing each feature [str] in the
         # original bprom format as a single string, but cleaned of irrelevant data
+        calculated_promoter_positions: List[int] = calculate_promoter_position(feature)
         promoter_data: Dict[str, str] = extract_promoter_data(feature)
-        promoter_data_converted: str = convert_extracted_promoter_data_to_ID_column_format(promoter_data)
+        promoter_data_converted: str = convert_extracted_promoter_data_to_ID_column_format(
+            promoter_data, calculated_promoter_positions)
 
-        promoter_position: List[int] = extract_promoter_position(feature)
         data.append(
             [extract_accession(feature),  # Seqid col (1)
              'bprom',  # Source col (2)
              'promoter',  # Type col (3)
-             promoter_position[0],  # Start column (4)
-             promoter_position[1],  # End column (5)
+             calculated_promoter_positions[0],  # Start column (4)
+             calculated_promoter_positions[1],  # End column (5)
              extract_LDF_score(feature),  # Score column (6)
              extract_strand_direction(feature),  # Strand direction column (7)
              '.',  # Phase column (8) '.' for all
@@ -202,7 +225,7 @@ def extract_data_for_all_features(features: List[str]) -> List[List[str]]:
 
 
 def convert_to_dataframe(extracted_data: List[List[str]]):
-    """Convert extracted data to Pandas dataframe with gff3 columns"""
+    """Convert extracted and processed data to Pandas dataframe with gff3 column names"""
 
     df = pd.DataFrame(extracted_data,
                       columns=['seqid', 'source', 'type', 'start', 'end',
@@ -212,30 +235,39 @@ def convert_to_dataframe(extracted_data: List[List[str]]):
 
 
 def write_to_gff3(dataframe):
-    """Create a gff3 file by using Pandas to tsv"""
-    with open(extracted_data, 'r') as rf:
-        return
+    """Create a gff3 text file from the DataFrame by converting to a tab separated values (tsv) file"""
+    tsv: pd.DataFrame = dataframe.to_csv(sep='\t', index=False, header=None)
 
-    return
+    # Gets the first element of the first column to use for
+    accession: str = dataframe.iloc[0][0]
+
+    year, month, day = date.today().year, date.today().month, date.today().day
+
+    with open(f'{year}_{month}_{day}_bprom_as_gff3_{accession}.txt', 'w') as wf:
+        for line in tsv:
+            wf.write(line)
+
+        return tsv
+
+
+def convert_bprom_output_to_gff3(bprom_file: TextIO):
+    """"""
+    bprom_file: List[str] = read_bprom_file(bprom_file)
+    concatenated_bprom_file: List[str] = concatenate_then_split(bprom_file)
+    working_file: List[str] = remove_promoterless_features(concatenated_bprom_file)
+    extracted_data = extract_data_for_all_features(working_file)
+    gff3_dataframe: pd.DataFrame = convert_to_dataframe(extracted_data)
+    gff3_text_file: TextIO = write_to_gff3(gff3_dataframe)
+
+    return gff3_text_file
 
 
 if __name__ == '__main__':
+    # Shows DataFrame output in the terminal
     bprom_file = read_bprom_file('BPROM_output.txt')
-    print(' bprom_file :', bprom_file)
     concatenated_bprom_file: List[str] = concatenate_then_split(bprom_file)
     working_file = remove_promoterless_features(concatenated_bprom_file)
-    position = extract_test_seq_position(concatenated_bprom_file[0])
-    promoters = extract_promoter_data(concatenated_bprom_file[1])
-    strand_direction = extract_strand_direction(working_file[2])
-    accession = extract_accession(working_file[0])
+    print(convert_to_dataframe(extract_data_for_all_features(working_file)).to_string())
 
-    # print(remove_promoterless_features(concatenated_bprom_file)[2])
-    # print('working_file: ', working_file[0])
-    # print(' position:', position,
-    #       '\n', '-10 promoter:', promoters['minus10_pos'], promoters['minus10_seq'],
-    #       '\n', '-35 promoter:', promoters['minus35_pos'], promoters['minus35_seq'],
-    #       '\n', 'strand direction: ', strand_direction,
-    #       '\n', 'accession: ', accession,
-    #       )
-    print(extract_data_for_all_features(working_file)),
-    print(convert_to_dataframe(extract_data_for_all_features(working_file)))
+    # Actual function for converting the BPROM output to gff3
+    convert_bprom_output_to_gff3('BPROM_output.txt')

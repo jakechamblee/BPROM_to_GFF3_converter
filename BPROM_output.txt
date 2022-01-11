@@ -1,4 +1,4 @@
->AF083977____ [Location=[930:1029](-)]                                          
+>AF083977____ [Location=[930:1029](-)]
  Length of sequence-       100
  Threshold for promoters -  0.20
  Number of predicted promoters -      1

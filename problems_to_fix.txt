@@ -17,11 +17,7 @@ deleting elements in a list, you must delete in REVERSE ORDER or you will delete
 at i+1 after the first deletion, i+2 after the second, etc instead of deleting at i
 as intended.
 
-To Do
-
-- Test other BPROM output files
-- Convert data to GFF3
-
+FIXED
 - Need to calculate the promoter START and END positions in the genome using the
 retrieved test location START and END (obtained with extract_test_seq_position())
     - What constitutes the start and end of a promoter? Is the -35 position the START?
@@ -29,3 +25,12 @@ retrieved test location START and END (obtained with extract_test_seq_position()
     - Why doesn't the -35 position + 35 equal "Promoter Pos:     X" in the BPROM output??
     - When calculating the - strand start and end positions, is the -35 box position counting
     up from the start CDS or the end CDS??
+
+### Promoter Pos:     X refers to the predicted transcriptional start site ###
+
+
+To Do
+- Test gff3 format with Anthony's gff3 file format checker in Galaxy
+- Test other BPROM output files
+- First row of the output seems like it's missing a tab half way through?
+    - But when you open in notepad it looks fine. Probably a non-issue
