@@ -2,15 +2,14 @@ import pandas as pd
 import re
 from typing import List, Match, Dict, TextIO, Union
 from datetime import date
-
+# In this file, a "feature" refers to the collection of data between the > keys of the bprom output.
+# That collection of data refers to one section of the DNA upstream of a gene
 
 def read_bprom_file(bprom_file: TextIO) -> List[str]:
-    """Creates list of strings, with each element containing a line from the file"""
+    """Reads in file, creating a list of strings with each list element containing a line from the file"""
     contents: List[str] = []
 
     with open(bprom_file) as file:
-        # creates a list of strings of each line from the .txt file
-        # Reads in one line at a time so it can handle very large files
         for line in file:
             contents.append(line)
 
@@ -257,7 +256,7 @@ def convert_bprom_output_to_gff3(bprom_file: TextIO):
     bprom_file: List[str] = read_bprom_file(bprom_file)
     concatenated_bprom_file: List[str] = concatenate_then_split(bprom_file)
     working_file: List[str] = remove_promoterless_features(concatenated_bprom_file)
-    extracted_data = extract_data_for_all_features(working_file)
+    extracted_data: List[List[Union[str, int]]] = extract_data_for_all_features(working_file)
     gff3_dataframe: pd.DataFrame = convert_to_dataframe(extracted_data)
     gff3_text_file: TextIO = write_to_gff3(gff3_dataframe)
 
@@ -273,5 +272,4 @@ if __name__ == '__main__':
 
     # Actual function for converting the BPROM output to gff3
     convert_bprom_output_to_gff3('BPROM_output.txt')
-    convert_bprom_output_to_gff3('Galaxy138-[BPROM_T7_sigma70_predictions].txt')
-    convert_bprom_output_to_gff3('Galaxy177-[Concatenated_datasets].txt')
+    #
