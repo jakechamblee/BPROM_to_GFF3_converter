@@ -199,7 +199,7 @@ def extract_tf_binding_elements():
 def extract_data_for_all_features(features: List[str]) -> List[List[Union[str, int]]]:
     """Loops through cleaned bprom output extracting all data of interest and builds the
        structure for loading into a dataframe"""
-    data: List[List[Union[str, int]]] = []
+    extracted_data: List[List[Union[str, int]]] = []
     for feature in features:
         # loop through features, a List[str] containing each feature [str] in the
         # original bprom format as a single string, but cleaned of irrelevant data
@@ -208,22 +208,22 @@ def extract_data_for_all_features(features: List[str]) -> List[List[Union[str, i
         promoter_data_converted: str = convert_extracted_promoter_data_to_ID_column_format(
             promoter_data, calculated_promoter_positions)
 
-        data.append(
-            [extract_accession(feature),  # Seqid col (1)
-             'bprom',  # Source col (2)
-             'promoter',  # Type col (3)
-             calculated_promoter_positions[0],  # Start column (4)
-             calculated_promoter_positions[1],  # End column (5)
-             extract_LDF_score(feature),  # Score column (6)
-             extract_strand_direction(feature),  # Strand direction column (7)
-             '.',  # Phase column (8) '.' for all
-             promoter_data_converted,  # Attributes column (9)
+        extracted_data.append(
+            [extract_accession(feature),  # Seqid, col 1
+             'bprom',  # Source, col 2
+             'promoter',  # Type, col 3
+             calculated_promoter_positions[0],  # Start, col 4
+             calculated_promoter_positions[1],  # End, col 5
+             extract_LDF_score(feature),  # Score, col 6
+             extract_strand_direction(feature),  # Strand direction, col 7
+             '.',  # Phase, col 8
+             promoter_data_converted,  # Attributes, col 9
              ])
 
-    return data
+    return extracted_data
 
 
-def convert_to_dataframe(extracted_data: List[List[str]]):
+def convert_to_dataframe(extracted_data: List[List[str]]) -> pd.DataFrame:
     """Convert extracted and processed data to Pandas dataframe with gff3 column names"""
 
     df = pd.DataFrame(extracted_data,
@@ -233,7 +233,7 @@ def convert_to_dataframe(extracted_data: List[List[str]]):
     return df
 
 
-def write_to_gff3(dataframe):
+def write_to_gff3(dataframe) -> None:
     """Create a gff3 text file from the DataFrame by converting to a tab separated values (tsv) file"""
     tsv: pd.DataFrame = dataframe.to_csv(sep='\t', index=False, header=None)
 
@@ -248,28 +248,30 @@ def write_to_gff3(dataframe):
         for line in tsv:
             wf.write(line)
 
-        return tsv
+    return
 
-
-def convert_bprom_output_to_gff3(bprom_file: TextIO):
-    """"""
+def convert_bprom_output_to_gff3(bprom_file: TextIO) -> None:
+    """Master function. Given a BPROM .txt file as output, extracts data and writes as a GFF3 file"""
     bprom_file: List[str] = read_bprom_file(bprom_file)
     concatenated_bprom_file: List[str] = concatenate_then_split(bprom_file)
     working_file: List[str] = remove_promoterless_features(concatenated_bprom_file)
     extracted_data: List[List[Union[str, int]]] = extract_data_for_all_features(working_file)
     gff3_dataframe: pd.DataFrame = convert_to_dataframe(extracted_data)
-    gff3_text_file: TextIO = write_to_gff3(gff3_dataframe)
+    # Create the gff3 text file
+    write_to_gff3(gff3_dataframe)
 
-    return gff3_text_file
+    return
 
 
 if __name__ == '__main__':
-    # Shows DataFrame output in the terminal
-    bprom_file = read_bprom_file('BPROM_output.txt')
-    concatenated_bprom_file: List[str] = concatenate_then_split(bprom_file)
-    working_file = remove_promoterless_features(concatenated_bprom_file)
-    print(convert_to_dataframe(extract_data_for_all_features(working_file)).to_string())
+    ## Shows the DataFrame output in the terminal for testing
+    # bprom_file = read_bprom_file('BPROM_output.txt')
+    # concatenated_bprom_file: List[str] = concatenate_then_split(bprom_file)
+    # working_file = remove_promoterless_features(concatenated_bprom_file)
+    # print(convert_to_dataframe(extract_data_for_all_features(working_file)).to_string())
 
     # Actual function for converting the BPROM output to gff3
     convert_bprom_output_to_gff3('BPROM_output.txt')
-    #
+    # Add argparse stuff here
+
+    # Upload to cpt github in the directory Galaxy-Tools/tools/external/
