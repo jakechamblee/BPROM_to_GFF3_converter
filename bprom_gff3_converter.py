@@ -1,3 +1,5 @@
+import argparse
+
 import pandas as pd
 import re
 from typing import List, Match, Dict, TextIO, Union
@@ -264,14 +266,18 @@ def convert_bprom_output_to_gff3(bprom_file: TextIO) -> None:
 
 
 if __name__ == '__main__':
-    ## Shows the DataFrame output in the terminal for testing
+    ## Shows the DataFrame output in the terminal for testing/debugging
     # bprom_file = read_bprom_file('BPROM_output.txt')
     # concatenated_bprom_file: List[str] = concatenate_then_split(bprom_file)
     # working_file = remove_promoterless_features(concatenated_bprom_file)
     # print(convert_to_dataframe(extract_data_for_all_features(working_file)).to_string())
 
+    parser = argparse.ArgumentParser(
+        description='converts BPROM output to the gff3 file format')
+
+    parser.add_argument('-f', help='bprom file as .txt')
+    args = parser.parse_args()
     # Actual function for converting the BPROM output to gff3
-    convert_bprom_output_to_gff3('BPROM_output.txt')
-    # Add argparse stuff here
+    convert_bprom_output_to_gff3(args.f)
 
     # Upload to cpt github in the directory Galaxy-Tools/tools/external/
